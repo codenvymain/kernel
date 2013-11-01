@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+	<!--
+
+		Copyright (C) 2009 eXo Platform SAS. This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License
+		as published by the Free Software Foundation; either version 2.1 of the License, or (at your option) any later version. This software is distributed in the
+		hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+		Lesser General Public License for more details. You should have received a copy of the GNU Lesser General Public License along with this software; if not,
+		write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+	-->
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
+	xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
+	<container-lifecycle-plugin>
+		<type>org.exoplatform.container.TestExoContainer$MyContainerLifecyclePlugin1</type>
+	</container-lifecycle-plugin>
+	<container-lifecycle-plugin>
+		<name>MyContainerLifecyclePlugin2</name>
+		<type>org.exoplatform.container.TestExoContainer$MyContainerLifecyclePlugin2</type>
+		<description>The description of the plugin</description>
+		<priority>-10</priority>
+		<init-params>
+			<value-param>
+				<name>param</name>
+				<description>a test parameter</description>
+				<value>value</value>
+			</value-param>
+		</init-params>
+	</container-lifecycle-plugin>
+	<container-lifecycle-plugin>
+		<type>org.exoplatform.container.TestExoContainer$MyContainerLifecyclePlugin3</type>
+		<priority>-5</priority>
+	</container-lifecycle-plugin>
+	<component>
+		<type>org.exoplatform.container.TestExoContainer$MyCounter</type>
+	</component>
+	<component>
+		<type>org.exoplatform.container.TestExoContainer$MyMTClass</type>
+	</component>
+	<component>
+		<type>org.exoplatform.container.TestExoContainer$MyClass</type>
+		<component-plugins>
+			<component-plugin>
+				<name>stackoverflow-test-plugin</name>
+				<set-method>add</set-method>
+				<type>org.exoplatform.container.TestExoContainer$MyClassPlugin</type>
+			</component-plugin>
+		</component-plugins>
+	</component>
+	<component>
+		<type>org.exoplatform.container.TestExoContainer$SOE1</type>
+		<component-plugins>
+			<component-plugin>
+				<name>stackoverflow-test-plugin</name>
+				<set-method>addPlugin</set-method>
+				<type>org.exoplatform.container.TestExoContainer$SOEPlugin</type>
+			</component-plugin>
+		</component-plugins>
+	</component>
+	<component>
+		<type>org.exoplatform.container.TestExoContainer$SOE2</type>
+	</component>
+	<component profiles="testCyclicRef">
+		<type>org.exoplatform.container.TestExoContainer$A</type>
+	</component>
+	<component profiles="testCyclicRef">
+		<type>org.exoplatform.container.TestExoContainer$B</type>
+		<component-plugins>
+			<component-plugin>
+				<name>testCyclicRef</name>
+				<set-method>add</set-method>
+				<type>org.exoplatform.container.TestExoContainer$BPlugin</type>
+			</component-plugin>
+		</component-plugins>
+	</component>
+	<component profiles="testStartOrder">
+		<type>org.exoplatform.container.TestExoContainer$C0</type>
+	</component>
+	<component profiles="testStartOrder">
+		<type>org.exoplatform.container.TestExoContainer$C1</type>
+		<component-plugins>
+			<component-plugin>
+				<name>testStartOrder</name>
+				<set-method>add</set-method>
+				<type>org.exoplatform.container.TestExoContainer$P</type>
+			</component-plugin>
+		</component-plugins>
+	</component>
+	<component profiles="testStartOrder">
+		<type>org.exoplatform.container.TestExoContainer$C2</type>
+	</component>
+   <component profiles="testStackOverflowError">
+      <key>org.exoplatform.container.TestExoContainer$MyService</key>
+      <type>org.exoplatform.container.TestExoContainer$MyServiceImpl</type>
+   </component>
+
+   <external-component-plugins profiles="testStackOverflowError">
+      <target-component>org.exoplatform.container.TestExoContainer$MyService</target-component>
+      <component-plugin>
+         <name>test.plugin</name>
+         <set-method>addPlugin</set-method>
+         <type>org.exoplatform.container.TestExoContainer$MyPlugin</type>
+         <description>User - Ticket Authenticator</description>
+      </component-plugin>
+   </external-component-plugins>   
+</configuration>
